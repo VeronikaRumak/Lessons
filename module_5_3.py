@@ -84,18 +84,22 @@ class House:
 
     # __add__(self, value) - увеличивает кол-во этажей на переданное значение value,
     # возвращает сам объект self.
-    def __add__(self, other):
-        self.number_of_floors += other
-        return self
+    def __add__(self, value):
+        if isinstance(value, House):
+            self.number_of_floors += value
+            return self
+        elif isinstance(value, int):
+            self.number_of_floors += value
+            return self
 
     # __radd__(self, value), __iadd__(self, value) - работают так же
     # как и __add__ (возвращают результат его вызова).
-    def __radd__(self, other):
-        self.__add__(other)
+    def __radd__(self, value):
+        self.__add__(value)
         return self
 
-    def __iadd__(self, other):
-        self.__add__(other)
+    def __iadd__(self, value):
+        self.__add__(value)
         return self
 
 
