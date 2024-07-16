@@ -33,8 +33,8 @@ class Animal:
 # Для класса Plant атрибут edible = False(съедобность),
 # name - индивидуальное название каждого растения
 class Plant:
-    def __init__(self, name, edible=False):
-        self.edible = edible
+    def __init__(self, name):
+        self.edible = False
         self.name = name
 
 
@@ -42,8 +42,6 @@ class Plant:
 # Mammal, Predator для Animal.
 # Flower, Fruit для Plant.
 
-# У каждого из объектов класса Mammal и Predator должны быть атрибуты и методы:
-# eat(food) - метод, где food - это параметр, принимающий объекты классов растений.
 class Mammal(Animal):
     pass
 
