@@ -12,6 +12,23 @@ class Animal:
         self.fed = False
         self.name = name
 
+    # Метод eat должен работать следующим образом:
+    def eat(self, food):
+
+        # Если переданное растение (food) съедобное - выводит на экран "<self.name> съел <food.name>",
+        # меняется атрибут fed на True.
+        if food.edible:
+            print(f"{self.name} съел {food.name}")
+            self.fed = True
+
+        # Если переданное растение (food) не съедобное - выводит на экран "<self.name>
+        # не стал есть <food.name>", меняется атрибут alive на False.
+        else:
+            print(f"{self.name} не стал есть {food.name}")
+            self.alive = False
+    # Т.е если животному дать съедобное растение, то животное насытится,
+    # если не съедобное - погибнет.
+
 
 # Для класса Plant атрибут edible = False(съедобность),
 # name - индивидуальное название каждого растения
@@ -28,36 +45,11 @@ class Plant:
 # У каждого из объектов класса Mammal и Predator должны быть атрибуты и методы:
 # eat(food) - метод, где food - это параметр, принимающий объекты классов растений.
 class Mammal(Animal):
-
-    # Метод eat должен работать следующим образом:
-    def eat(self, food):
-
-        # Если переданное растение (food) съедобное - выводит на экран "<self.name> съел <food.name>",
-        # меняется атрибут fed на True.
-        if food.edible:
-            print(f"{self.name} съел {food.name}")
-            self.fed = True
-
-        # Если переданное растение (food) не съедобное - выводит на экран "<self.name>
-        # не стал есть <food.name>", меняется атрибут alive на False.
-        else:
-            print(f"{self.name} не стал есть {food.name}")
-            self.alive = False
-
-# Т.е если животному дать съедобное растение, то животное насытится,
-# если не съедобное - погибнет.
+    pass
 
 
-# У каждого из объектов класса Mammal и Predator должны быть атрибуты и методы:
-# eat(food) - метод, где food - это параметр, принимающий объекты классов растений.
 class Predator(Animal):
-    def eat(self, food):
-        if food.edible:
-            print(f"{self.name} съел {food.name}")
-            self.fed = True
-        else:
-            print(f"{self.name} не стал есть {food.name}")
-            self.alive = False
+    pass
 
 
 class Flower(Plant):
@@ -67,8 +59,7 @@ class Flower(Plant):
 
 class Fruit(Plant):
     # У каждого объекта Fruit должен быть атрибут edible = True (переопределить при наследовании)
-    def __init__(self, name):
-        super().__init__(name, edible=True)
+    edible = True
 
 
 # Создайте объекты классов и проделайте действия затронутые в примере
