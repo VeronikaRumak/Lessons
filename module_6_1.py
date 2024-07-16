@@ -57,7 +57,9 @@ class Flower(Plant):
 
 class Fruit(Plant):
     # У каждого объекта Fruit должен быть атрибут edible = True (переопределить при наследовании)
-    edible = True
+    def __init__(self, name):
+        self.edible = True
+        self.name = name
 
 
 # Создайте объекты классов и проделайте действия затронутые в примере
