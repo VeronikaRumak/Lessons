@@ -63,11 +63,32 @@ class WordsFinder:
     # find(self, word) - метод, где word - искомое слово.
     # Возвращает словарь, где ключ - название файла,
     # значение - позиция первого такого слова в списке слов этого файла.
+    def find(self, word):
+        places = {}
+        for key, value in self.get_all_words().items():
+            if word.lower() in value:
+                places[key] = value.index(word.lower()) + 1
+
+        return places
 
     # count(self, word) - метод, где word - искомое слово.
     # Возвращает словарь, где ключ - название файла,
     # значение - количество слова word в списке слов этого файла.
+    def count(self, word):
+        counters = {}
+        for value, key in self.get_all_words().items():
+            words_count = key.count(word.lower())
+            counters[value] = words_count
+
+        return counters
 
 
-finder2 = WordsFinder('test_file.txt')
-print(finder2.get_all_words()) # Все слова
+# finder2 = WordsFinder('test_file.txt')
+# print(finder2.get_all_words()) # Все слова
+# print(finder2.find('TEXT')) # 3 слово по счёту
+# print(finder2.count('teXT')) # 4 слова teXT в тексте всего
+
+finder1 = WordsFinder('Walt Whitman - O Captain! My Captain!.txt')
+print(finder1.get_all_words())
+print(finder1.find('captain'))
+print(finder1.count('captain'))
