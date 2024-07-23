@@ -33,7 +33,7 @@ class Product:
 class Shop:
     # Инкапсулированный атрибут __file_name = 'products.txt'.
     def __init__(self):
-        self.__file_name = 'products2.txt'
+        self.__file_name = 'products.txt'
 
     # Метод get_products(self), который считывает всю информацию из файла __file_name,
     # закрывает его и возвращает единую строку со всеми товарами из файла __file_name.
@@ -47,13 +47,13 @@ class Shop:
     # который принимает неограниченное количество объектов класса Product.
     def add(self, *products):
         file = open(self.__file_name, 'a')
-
+        current_products = self.get_products()
         for product in products:
             # Добавляет в файл __file_name каждый продукт из products,
             # если его ещё нет в файле (по названию).
-            if product not in products:
-                file.write(product + '\n')
-
+            if product.name not in current_products:
+                file.write(str(product) + '\n')
+                current_products += product.name + '\n'
             # Если такой продукт уже есть, то не добавляет и выводит строку
             # 'Продукт <название> уже есть в магазине'.
             else:
