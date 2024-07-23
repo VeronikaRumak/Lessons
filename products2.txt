@@ -1,0 +1,29 @@
+Potato, 50.5, Vegetables
+Spaghetti, 3.4, Groceries
+P
+o
+t
+a
+t
+o
+,
+ 
+5
+0
+.
+5
+,
+ 
+V
+e
+g
+e
+t
+a
+b
+l
+e
+s
+
+
+Potato, 50.5, VegetablesSpaghetti, 3.4, GroceriesPotato, 5.5, Vegetables
