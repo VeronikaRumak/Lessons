@@ -17,6 +17,7 @@ def personal_sum(numbers):
         # Если же при переборе встречается данное типа отличного от числового,
         # то обработать исключение TypeError, увеличив счётчик incorrect_data на 1.
         except TypeError:
+            print(f'Некорректный тип данных для подсчета суммы - {i}')
             incorrect_data += 1
 
     # В конечном итоге функция возвращает кортеж из двух значений:
@@ -27,27 +28,12 @@ def personal_sum(numbers):
 # Функция calculate_average(numbers)
 def calculate_average(numbers):
     try:
-
         # Должна принимать коллекцию numbers и возвращать: среднее арифметическое всех чисел.
-        if isinstance(numbers, (list, tuple, set)):
-            if isinstance(numbers, (int, float)):
+        # Внутри для подсчёта суммы используйте функцию personal_sum написанную ранее.
+        total_sum, incorrect_data = personal_sum(numbers)
 
-                # Внутри для подсчёта суммы используйте функцию personal_sum написанную ранее.
-                total_sum, incorrect_data = personal_sum(numbers)
-
-                # Среднее арифметическое - сумма всех данных делённая на их количество.
-                count = len(numbers) - incorrect_data
-
-
-                avg = total_sum / count
-                return avg
-
-            else:
-                for i in numbers:
-                    print(f'В numbers записан некорректный тип данных - {i}')
-        else:
-            for i in numbers:
-                print(f'В numbers записан некорректный тип данных - {i}')
+        # Среднее арифметическое - сумма всех данных делённая на их количество.
+        return total_sum / (len(numbers) - incorrect_data)
 
     # Т.к. коллекция numbers может оказаться пустой,
     # то обработайте исключение ZeroDivisionError при делении на 0 и верните 0.
@@ -59,7 +45,6 @@ def calculate_average(numbers):
     # 'В numbers записан некорректный тип данных'. В таком случае функция просто вернёт None.
     except TypeError:
         print('В numbers записан некорректный тип данных')
-        return None
 
 
 # Строка перебирается, но каждый символ - строковый тип
