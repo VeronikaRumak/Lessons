@@ -49,15 +49,14 @@ async def update_user(
         user_id: Annotated[int, Path(description='Enter user ID', example=1)],
         username: Annotated[str, Path(min_length=5, max_length=20, description='Enter username', example='UrbanProfi')],
         age: Annotated[int, Path(ge=18, le=120, description='Enter age', example=28)]) -> User:
-    try:
-        for user in users:
-            if user.id == user_id:
-                user.username = username
-                user.age = age
-                return user
 
-    except IndexError:
-        raise HTTPException(status_code=404, detail="User was not found")
+    for user in users:
+        if user.id == user_id:
+            user.username = username
+            user.age = age
+            return user
+        else:
+            raise HTTPException(status_code=404, detail="User was not found")
 
 
 # delete запрос по маршруту '/user/{user_id}', теперь:
