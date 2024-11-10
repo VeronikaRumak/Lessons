@@ -69,7 +69,7 @@ async def delete_user(
     try:
         for user in users:
             if user.id == user_id:
-                users.remove(user)
+                users.pop(user_id)
                 return user
 
     except IndexError:
