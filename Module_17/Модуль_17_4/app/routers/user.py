@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.backend.db_depends import get_db
 # Аннотации, Модели БД и Pydantic.
 from typing import Annotated
-from app.models import User
+from app.models import User, Task
 from app.schemas import CreateUser, UpdateUser
 # Функции работы с записями.
 from sqlalchemy import insert, select, update, delete
@@ -36,10 +36,14 @@ async def all_users(db: Annotated[Session, Depends(get_db)]):
 # Если пользователь не None, то возвращает его.
 # В противном случае выбрасывает исключение с кодом 404 и описанием "User was not found"
 @router.get('/user_id')
-async def user_by_id(user_id: int, db: Annotated[Session, Depends(get_db)]):
+async def user_by_id(user_id: int,
+                     db: Annotated[Session, Depends(get_db)]):
+
     user = db.scalars(select(User).where(User.id == user_id)).first()
+
     if user:
         return user
+
     else:
         raise HTTPException(status_code=404, detail="User was not found")
 
@@ -51,7 +55,8 @@ async def user_by_id(user_id: int, db: Annotated[Session, Depends(get_db)]):
 # В конце возвращает словарь {'status_code': status.HTTP_201_CREATED, 'transaction': 'Successful'}
 # Обработку исключения существующего пользователя по user_id или username можете сделать по желанию.
 @router.post('/create')
-async def create_user(db: Annotated[Session, Depends(get_db)], create_user: CreateUser):
+async def create_user(db: Annotated[Session, Depends(get_db)],
+                      create_user: CreateUser):
     db.execute(insert(User).values(
         username=create_user.username,
         firstname=create_user.firstname,
@@ -86,17 +91,31 @@ async def update_user(db: Annotated[Session, Depends(get_db)], user_id: int,
     return {'status_code': status.HTTP_200_OK, 'transaction': 'User update is successful!'}
 
 
-
 # Функция delete_user ('/delete'):
-# Для удаления используйте ранее импортированную функцию delete.
-# Всё должно работать аналогично функции update_user, только объект удаляется.
-# Исключение выбрасывать то же.
+# Дополните функцию delete_user так, чтобы вместе с пользователем удалялись все записи связанные с ним.
 @router.delete('/delete')
-async def delete_user(user_id: int, db: Annotated[Session, Depends(get_db)]):
+async def delete_user(user_id: int,
+                      db: Annotated[Session, Depends(get_db)]):
+
     user = db.scalars(select(User).where(User.id == user_id))
+
     if user:
+        db.execute(delete(Task).where(Task.user_id == user_id))
         db.execute(delete(User).where(User.id == user_id))
         db.commit()
-        return {'status_code': status.HTTP_200_OK, 'transaction': 'User deleted successfully!'}
+        return {'status_code': status.HTTP_200_OK, 'transaction': 'User and associated tasks deleted successfully!'}
+
     else:
         raise HTTPException(status_code=404, detail="User was not found")
+
+
+# В модуле user.py:
+# Создайте новый маршрут get "/user_id/tasks" и функцию tasks_by_user_id.
+# Логика этой функции должна заключатся в возврате всех Task конкретного User по id.
+@router.get("/user_id/tasks")
+async def tasks_by_user_id(user_id: int,
+                           db: Annotated[Session, Depends(get_db)]):
+
+    tasks = db.scalars(select(Task).where(Task.user_id == user_id)).all()
+    return tasks
+
