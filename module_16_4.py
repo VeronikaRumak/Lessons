@@ -28,7 +28,8 @@ async def get_users() -> List[User]:
 
 # post запрос по маршруту '/user/{username}/{age}', теперь:
 # Добавляет в список users объект User.
-# id этого объекта будет на 1 больше, чем у последнего в списке users. Если список users пустой, то 1.
+# id этого объекта будет на 1 больше, чем у последнего в списке users.
+# Если список users пустой, то 1.
 # Все остальные параметры объекта User - переданные в функцию username и age соответственно.
 # В конце возвращает созданного пользователя.
 @app.post('/user/{username}/{age}')
@@ -75,10 +76,13 @@ async def update_user(
 async def delete_user(
         user_id: Annotated[int, Path(description='Enter user ID', example=2)]) -> User:
 
-    for user in users:
+    # enumerate позволяет пронумеровать элементы итерируемого объекта
+    # (в данном случае список, который заполняется в post запросе).
+    # Он необходим для удаления user и сохранения нумерации.
+    for i, user in enumerate(users):
         if user.id == user_id:
-            users.pop(user_id)
-            return user
+            deleted_user = users.pop(i)
+            return deleted_user
 
     raise HTTPException(status_code=404, detail="User was not found")
 
