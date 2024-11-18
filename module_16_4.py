@@ -4,9 +4,10 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-
 # Создайте пустой список users = []
 users = []
+
+next_user_id = 1
 
 
 # Создайте класс(модель) User, наследованный от BaseModel,
@@ -37,14 +38,11 @@ async def add_user(
         username: Annotated[str, Path(min_length=5, max_length=20, description='Enter username', example='UrbanUser')],
         age: Annotated[int, Path(ge=18, le=120, description='Enter age', example=24)]) -> User:
 
+    global next_user_id
     try:
-        if users:
-            user_id = len(users) + 1
-        else:
-            user_id = 1
-
-        new_user = User(id=user_id, username=username, age=age)
+        new_user = User(id=next_user_id, username=username, age=age)
         users.append(new_user)
+        next_user_id += 1
         return new_user
 
     except IndexError:
@@ -65,8 +63,7 @@ async def update_user(
             user.username = username
             user.age = age
             return user
-        else:
-            raise HTTPException(status_code=404, detail="User was not found")
+    raise HTTPException(status_code=404, detail="User was not found")
 
 
 # delete запрос по маршруту '/user/{user_id}', теперь:
@@ -76,14 +73,9 @@ async def update_user(
 async def delete_user(
         user_id: Annotated[int, Path(description='Enter user ID', example=2)]) -> User:
 
-    # enumerate позволяет пронумеровать элементы итерируемого объекта
-    # (в данном случае список, который заполняется в post запросе).
-    # Он необходим для удаления user и сохранения нумерации.
     for i, user in enumerate(users):
         if user.id == user_id:
             deleted_user = users.pop(i)
             return deleted_user
 
     raise HTTPException(status_code=404, detail="User was not found")
-
-
